@@ -1,0 +1,43 @@
+#
+# Description
+# -----------
+# This table stores links to external websites that relate to the document.
+#
+# Fields
+# ------
+# id:                   The id for each link.
+# uuid:                 The Universal Unique ID.
+# tnid:                 The tenant the link is attached to.
+#
+# document_id:          The ID of the document the link is for.
+# 
+# link_type:            The type of link.
+#
+#                       1000 - Link to webpage.
+#                       2000 - Video, youtube **future**
+#                       2001 - Video, vimeo **future**
+#                       3000 - Audio, soundcloud **future**
+#
+# name:                 The name for the link.
+# url:                  The url for the link.
+#
+# description:          The description of the link to be used in the list of links.
+#
+# date_added:           The UTC date and time the record was added.
+# last_updated:         The UTC date and time the record was last updated.
+#
+create table ciniki_lapt_links (
+    id int not null auto_increment,
+    uuid char(36) not null,
+    tnid int not null,
+    document_id int not null,
+    name varchar(150) not null,
+    link_type smallint unsigned not null,
+    url varchar(255) not null,
+    description varchar(6000) not null,
+    date_added datetime not null,
+    last_updated datetime not null,
+    primary key (id),
+    unique index (tnid, document_id, url),
+    index sync (tnid, uuid, last_updated)
+) ENGINE='InnoDB', COMMENT='v1.01';
