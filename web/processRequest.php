@@ -124,6 +124,21 @@ function ciniki_lapt_web_processRequest(&$ciniki, $settings, $tnid, $args) {
     //
     if( ciniki_core_checkModuleFlags($ciniki, 'ciniki.lapt', 0x02) ) {
         //
+        // Get the settings for the tag categories
+        //
+        $strsql = "SELECT detail_key, detail_value "
+            . "FROM ciniki_lapt_settings "
+            . "WHERE detail_key like 'tag-40-%' "
+            . "AND tnid = '" . ciniki_core_dbQuote($ciniki, $tnid) . "' "
+            . "";
+        ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbQueryList2');
+        $rc = ciniki_core_dbQueryList2($ciniki, $strsql, 'ciniki.lapt', 'settings');
+        if( $rc['stat'] != 'ok' ) {
+            return $rc;
+        }
+        $category_settings = isset($rc['settings']) ? $rc['settings'] : array();
+
+        //
         // Get the list of categories
         //
         if( isset($type_permalink) && $type_permalink != '' ) {
@@ -168,6 +183,12 @@ function ciniki_lapt_web_processRequest(&$ciniki, $settings, $tnid, $args) {
 
         foreach($categories as $permalink => $category) {
             $categories[$permalink]['image_id'] = 0;
+            if( isset($category_settings["tag-40-image-{$permalink}"]) && $category_settings["tag-40-image-{$permalink}"] != '' ) {
+                $categories[$permalink]['image_id'] = $category_settings["tag-40-image-{$permalink}"];
+            }
+            if( isset($category_settings["tag-40-content-{$permalink}"]) && $category_settings["tag-40-content-{$permalink}"] != '' ) {
+                $categories[$permalink]['content'] = $category_settings["tag-40-content-{$permalink}"];
+            }
         }
       
         $display = 'categories';
@@ -206,6 +227,21 @@ function ciniki_lapt_web_processRequest(&$ciniki, $settings, $tnid, $args) {
     // Display a list of documents
     //
     if( $display == 'list' || $display == 'typelist' || $display == 'categorylist' ) {
+        if( isset($categories[$category_permalink]['content']) && $categories[$category_permalink]['content'] != '' ) {
+            if( isset($categories[$category_permalink]['image_id']) && $categories[$category_permalink]['image_id'] > 0 ) {
+                $page['blocks'][] = array('type'=>'image', 'section'=>'primary-image', 'primary'=>'yes', 
+                    'image_id'=>$categories[$category_permalink]['image_id'], 
+                    'base_url'=>$base_url,
+                    'title'=>$document['title'],
+                    );
+            }
+            if( isset($categories[$category_permalink]['content']) && $categories[$category_permalink]['content'] != '' ) {
+                $page['blocks'][] = array('type'=>'content', 'section'=>'content', 'title'=>'', 
+                    'content'=>$categories[$category_permalink]['content'],
+                    );
+            }
+        }
+
         //
         // Display list as thumbnails
         //
