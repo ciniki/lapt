@@ -39,13 +39,20 @@ function ciniki_lapt_documentList($ciniki) {
     }
 
     //
+    // Load the date format strings for the user
+    //
+    ciniki_core_loadMethod($ciniki, 'ciniki', 'users', 'private', 'dateFormat');
+    $date_format = ciniki_users_dateFormat($ciniki, 'php');
+
+    //
     // Get the list of documents
     //
     $strsql = "SELECT documents.id, "
         . "documents.title, "
         . "documents.permalink, "
         . "documents.status, "
-        . "documents.flags ";
+        . "documents.flags, "
+        . "documents.doc_date ";
     if( isset($args['type']) && $args['type'] != '' 
         && isset($args['category']) && $args['category'] != '' 
         ) {
@@ -89,7 +96,9 @@ function ciniki_lapt_documentList($ciniki) {
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryArrayTree');
     $rc = ciniki_core_dbHashQueryArrayTree($ciniki, $strsql, 'ciniki.lapt', array(
         array('container'=>'documents', 'fname'=>'id', 
-            'fields'=>array('id', 'title', 'permalink', 'status', 'flags')),
+            'fields'=>array('id', 'title', 'permalink', 'status', 'flags', 'doc_date'),
+            'utctotz'=>array('doc_date'=>array('timezone'=>'UTC', 'format'=>$date_format)),
+            ),
         ));
     if( $rc['stat'] != 'ok' ) {
         return $rc;

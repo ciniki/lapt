@@ -265,7 +265,7 @@ function ciniki_lapt_web_processRequest(&$ciniki, $settings, $tnid, $args) {
                     . ") "
                 . "WHERE types.tnid = '" . ciniki_core_dbQuote($ciniki, $tnid) . "' "
                 . "AND types.permalink = '" . ciniki_core_dbQuote($ciniki, $type_permalink) . "' "
-                . "ORDER BY documents.title "
+                . "ORDER BY documents.doc_date DESC, documents.title "
                 . "";
             
         } elseif( isset($type_permalink) && $type_permalink != '' ) {
@@ -283,7 +283,7 @@ function ciniki_lapt_web_processRequest(&$ciniki, $settings, $tnid, $args) {
                     . ") "
                 . "WHERE types.tnid = '" . ciniki_core_dbQuote($ciniki, $tnid) . "' "
                 . "AND types.permalink = '" . ciniki_core_dbQuote($ciniki, $type_permalink) . "' "
-                . "ORDER BY documents.title "
+                . "ORDER BY documents.doc_date DESC, documents.title "
                 . "";
         } elseif( isset($category_permalink) && $category_permalink != '' ) {
             $strsql = "SELECT documents.id, "
@@ -300,7 +300,7 @@ function ciniki_lapt_web_processRequest(&$ciniki, $settings, $tnid, $args) {
                     . ") "
                 . "WHERE categories.tnid = '" . ciniki_core_dbQuote($ciniki, $tnid) . "' "
                 . "AND categories.permalink = '" . ciniki_core_dbQuote($ciniki, $category_permalink) . "' "
-                . "ORDER BY documents.title "
+                . "ORDER BY documents.doc_date DESC, documents.title "
                 . "";
         } else {
             $strsql = "SELECT documents.id, "
@@ -312,7 +312,7 @@ function ciniki_lapt_web_processRequest(&$ciniki, $settings, $tnid, $args) {
                 . "FROM ciniki_lapt_documents AS documents "
                 . "WHERE documents.tnid = '" . ciniki_core_dbQuote($ciniki, $tnid) . "' "
                 . "AND documents.status = 50 "
-                . "ORDER BY documents.title "
+                . "ORDER BY documents.doc_date DESC, documents.title "
                 . "";
         }
         $rc = ciniki_core_dbHashQuery($ciniki, $strsql, 'ciniki.lapt', 'document');

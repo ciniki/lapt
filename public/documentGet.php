@@ -63,6 +63,7 @@ function ciniki_lapt_documentGet($ciniki) {
             'permalink'=>'',
             'status'=>'20',
             'flags'=>'0',
+            'doc_date'=>'',
             'image_id'=>'',
             'synopsis'=>'',
             'content'=>'',

@@ -110,14 +110,71 @@ function ciniki_lapt_documentDelete(&$ciniki) {
     //
     // Remove the files
     //
+    $strsql = "SELECT id, uuid "
+        . "FROM ciniki_lapt_files "
+        . "WHERE document_id = '" . ciniki_core_dbQuote($ciniki, $args['document_id']) . "' "
+        . "AND tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
+        . "";
+    $rc = ciniki_core_dbHashQuery($ciniki, $strsql, 'ciniki.lapt', 'item');
+    if( $rc['stat'] != 'ok' ) {
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.lapt.47', 'msg'=>'Unable to load files', 'err'=>$rc['err']));
+    }
+    if( isset($rc['rows']) ) {
+        $files = $rc['rows'];
+        foreach($files as $file) {
+            ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'objectDelete');
+            $rc = ciniki_core_objectDelete($ciniki, $args['tnid'], 'ciniki.lapt.file', $file['id'], $file['uuid'], 0x04);
+            if( $rc['stat'] != 'ok' ) {
+                return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.lapt.48', 'msg'=>'Unable to remove file', 'err'=>$rc['err']));
+            }
+        }
+    }
 
     //
     // Remove the images
     //
+    $strsql = "SELECT id, uuid "
+        . "FROM ciniki_lapt_images "
+        . "WHERE document_id = '" . ciniki_core_dbQuote($ciniki, $args['document_id']) . "' "
+        . "AND tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
+        . "";
+    $rc = ciniki_core_dbHashQuery($ciniki, $strsql, 'ciniki.lapt', 'item');
+    if( $rc['stat'] != 'ok' ) {
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.lapt.49', 'msg'=>'Unable to load images', 'err'=>$rc['err']));
+    }
+    if( isset($rc['rows']) ) {
+        $images = $rc['rows'];
+        foreach($images as $image) {
+            ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'objectDelete');
+            $rc = ciniki_core_objectDelete($ciniki, $args['tnid'], 'ciniki.lapt.image', $image['id'], $image['uuid'], 0x04);
+            if( $rc['stat'] != 'ok' ) {
+                return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.lapt.50', 'msg'=>'Unable to remove image', 'err'=>$rc['err']));
+            }
+        }
+    }
 
     //
     // Remove the links
     //
+    $strsql = "SELECT id, uuid "
+        . "FROM ciniki_lapt_links "
+        . "WHERE document_id = '" . ciniki_core_dbQuote($ciniki, $args['document_id']) . "' "
+        . "AND tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
+        . "";
+    $rc = ciniki_core_dbHashQuery($ciniki, $strsql, 'ciniki.lapt', 'item');
+    if( $rc['stat'] != 'ok' ) {
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.lapt.51', 'msg'=>'Unable to load links', 'err'=>$rc['err']));
+    }
+    if( isset($rc['rows']) ) {
+        $links = $rc['rows'];
+        foreach($links as $link) {
+            ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'objectDelete');
+            $rc = ciniki_core_objectDelete($ciniki, $args['tnid'], 'ciniki.lapt.link', $link['id'], $link['uuid'], 0x04);
+            if( $rc['stat'] != 'ok' ) {
+                return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.lapt.52', 'msg'=>'Unable to remove file', 'err'=>$rc['err']));
+            }
+        }
+    }
 
     //
     // Remove the document

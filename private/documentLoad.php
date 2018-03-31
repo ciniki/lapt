@@ -17,6 +17,12 @@
 function ciniki_lapt_documentLoad($ciniki, $tnid, $document_id) {
     
     //
+    // Load the date format strings for the user
+    //
+    ciniki_core_loadMethod($ciniki, 'ciniki', 'users', 'private', 'dateFormat');
+    $date_format = ciniki_users_dateFormat($ciniki, 'php');
+    
+    //
     // Get the document
     //
     $strsql = "SELECT ciniki_lapt_documents.id, "
@@ -24,6 +30,7 @@ function ciniki_lapt_documentLoad($ciniki, $tnid, $document_id) {
         . "ciniki_lapt_documents.permalink, "
         . "ciniki_lapt_documents.status, "
         . "ciniki_lapt_documents.flags, "
+        . "ciniki_lapt_documents.doc_date, "
         . "ciniki_lapt_documents.image_id, "
         . "ciniki_lapt_documents.synopsis, "
         . "ciniki_lapt_documents.content "
@@ -37,7 +44,8 @@ function ciniki_lapt_documentLoad($ciniki, $tnid, $document_id) {
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryArrayTree');
     $rc = ciniki_core_dbHashQueryArrayTree($ciniki, $strsql, 'ciniki.lapt', array(
         array('container'=>'documents', 'fname'=>'id', 
-            'fields'=>array('id', 'title', 'permalink', 'status', 'flags', 'image_id', 'synopsis', 'content'),
+            'fields'=>array('id', 'title', 'permalink', 'status', 'flags', 'doc_date', 'image_id', 'synopsis', 'content'),
+            'utctotz'=>array('doc_date'=>array('timezone'=>'UTC', 'format'=>$date_format)),
             ),
         ));
     if( $rc['stat'] != 'ok' ) {

@@ -21,6 +21,7 @@ function ciniki_lapt_documentUpdate(&$ciniki) {
         'permalink'=>array('required'=>'no', 'blank'=>'no', 'name'=>'Permalink'),
         'status'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Status'),
         'flags'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Options'),
+        'doc_date'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Document Date'),
         'image_id'=>array('required'=>'no', 'blank'=>'no', 'name'=>'Primary Image'),
         'synopsis'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Synopsis'),
         'content'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Content'),

@@ -189,6 +189,7 @@ function ciniki_lapt_main() {
         'general':{'label':'', 'aside':'yes', 'fields':{
             'title':{'label':'Title', 'required':'yes', 'type':'text'},
             'status':{'label':'Status', 'type':'toggle', 'toggles':{'20':'Draft', '50':'Published', '90':'Archived'}},
+            'doc_date':{'label':'Date', 'type':'date'},
 //            'flags':{'label':'Options', 'type':'text'},
             }},
         '_types':{'label':'Document Type', 'aside':'yes', 

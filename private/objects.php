@@ -26,6 +26,7 @@ function ciniki_lapt_objects(&$ciniki) {
             'permalink' => array('name'=>'Permalink'),
             'status' => array('name'=>'Status', 'default'=>'20'),
             'flags' => array('name'=>'Options', 'default'=>'0'),
+            'doc_date' => array('name'=>'Document Date', 'default'=>''),
             'image_id' => array('name'=>'Primary Image', 'ref'=>'ciniki.images.image', 'default'=>'0'),
             'synopsis' => array('name'=>'Synopsis', 'default'=>''),
             'content' => array('name'=>'Content', 'default'=>''),
