@@ -108,7 +108,7 @@ function ciniki_lapt_documentLoad($ciniki, $tnid, $document_id) {
     $strsql = "SELECT id, uuid, name, permalink, extension, description "
         . "FROM ciniki_lapt_files "
         . "WHERE tnid = '" . ciniki_core_dbQuote($ciniki, $tnid) . "' "
-        . "AND (flags&0x01) = 0x01 "
+//        . "AND (flags&0x01) = 0x01 "
         . "AND document_id = '" . ciniki_core_dbQuote($ciniki, $document['id']) . "' "
         . "";
     $rc = ciniki_core_dbHashQueryArrayTree($ciniki, $strsql, 'ciniki.lapt', array(
@@ -130,7 +130,7 @@ function ciniki_lapt_documentLoad($ciniki, $tnid, $document_id) {
         . "description "
         . "FROM ciniki_lapt_images "
         . "WHERE document_id = '" . ciniki_core_dbQuote($ciniki, $document['id']) . "' "
-        . "AND (flags&0x01) = 0x01 "
+//        . "AND (flags&0x01) = 0x01 "
         . "AND tnid = '" . ciniki_core_dbQuote($ciniki, $tnid) . "' "
         . "";
     $rc = ciniki_core_dbHashQueryArrayTree($ciniki, $strsql, 'ciniki.lapt', array(
