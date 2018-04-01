@@ -105,14 +105,14 @@ function ciniki_lapt_documentLoad($ciniki, $tnid, $document_id) {
     // 
     // Get the files
     //
-    $strsql = "SELECT id, uuid, name, permalink, extension, description "
+    $strsql = "SELECT id, uuid, name, permalink, flags, extension, description "
         . "FROM ciniki_lapt_files "
         . "WHERE tnid = '" . ciniki_core_dbQuote($ciniki, $tnid) . "' "
 //        . "AND (flags&0x01) = 0x01 "
         . "AND document_id = '" . ciniki_core_dbQuote($ciniki, $document['id']) . "' "
         . "";
     $rc = ciniki_core_dbHashQueryArrayTree($ciniki, $strsql, 'ciniki.lapt', array(
-        array('container'=>'files', 'fname'=>'id', 'fields'=>array('id', 'uuid', 'name', 'permalink', 'extension', 'description')),
+        array('container'=>'files', 'fname'=>'id', 'fields'=>array('id', 'uuid', 'name', 'permalink', 'flags', 'extension', 'description')),
         ));
     if( $rc['stat'] != 'ok' ) {
         return $rc;
