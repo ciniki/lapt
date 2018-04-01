@@ -209,12 +209,15 @@ function ciniki_lapt_web_processRequest(&$ciniki, $settings, $tnid, $args) {
         $document_permalink = $uri_split[0];
         $display = 'document';
         //
-        // Check for gallery pic request
+        // Check for gallery pic request, or download request
         //
         if( isset($uri_split[1]) && $uri_split[1] == 'gallery' && isset($uri_split[2]) && $uri_split[2] != '' ) {
             $image_permalink = $uri_split[2];
             $display = 'documentpic';
-        }
+        } elseif( isset($uri_split[1]) && $uri_split[1] == 'download' && isset($uri_split[2]) && $uri_split[2] != '' ) {
+            $file_permalink = $uri_split[2];
+            $display = 'documentdownload';
+        } 
         $ciniki['response']['head']['og']['url'] .= '/' . $document_permalink;
         $base_url .= '/' . $document_permalink;
     }
@@ -330,7 +333,7 @@ function ciniki_lapt_web_processRequest(&$ciniki, $settings, $tnid, $args) {
         $page['blocks'][] = array('type'=>'tagimages', 'base_url'=>$base_url, 'tags'=>$categories);
     }
 
-    elseif( $display == 'document' || $display == 'documentpic' ) {
+    elseif( $display == 'document' || $display == 'documentpic' || $display == 'documentdownload' ) {
         if( isset($category) ) {
             $ciniki['response']['head']['links'][] = array('rel'=>'canonical', 'href'=>$args['base_url'] . '/' . $document_permalink);
         }
@@ -397,6 +400,34 @@ function ciniki_lapt_web_processRequest(&$ciniki, $settings, $tnid, $args) {
                         $page['blocks'][] = array('type'=>'gallery', 'title'=>'Additional Images', 'section'=>'gallery-images', 'base_url'=>$base_url . '/gallery', 'images'=>$document['images']);
                     }
                 }
+            } elseif( $display == 'documentdownload' ) {
+                $file_permalink = preg_replace("/\.[^\.]+$/", '', $file_permalink);
+                if( isset($document['files']) ) { 
+                    foreach($document['files'] as $fid => $file) {
+                        if( $file['permalink'] == $file_permalink && ($file['flags']&0x01) == 0x01 ) {
+                            //
+                            // Get the tenant storage directory
+                            //
+                            ciniki_core_loadMethod($ciniki, 'ciniki', 'tenants', 'hooks', 'storageDir');
+                            $rc = ciniki_tenants_hooks_storageDir($ciniki, $tnid, array());
+                            if( $rc['stat'] != 'ok' ) {
+                                return $rc;
+                            }
+                            $tenant_storage_dir = $rc['storage_dir'];
+                            //
+                            // Get the storage filename
+                            //
+                            $storage_filename = $tenant_storage_dir . '/ciniki.lapt/files/' . $file['uuid'][0] . '/' . $file['uuid'];
+                            if( file_exists($storage_filename) ) {
+                                $file['binary_content'] = file_get_contents($storage_filename);
+                            }
+
+                            return array('stat'=>'ok', 'download'=>$file);
+                        }
+                    }
+                } 
+                $page['blocks'][] = array('type'=>'message', 'content'=>"I'm sorry, but we can't seem to find the file you requested.");
+
             } else {
                 if( isset($document['image_id']) && $document['image_id'] > 0 ) {
                     $page['blocks'][] = array('type'=>'image', 'section'=>'primary-image', 'primary'=>'yes', 'image_id'=>$document['image_id'], 
@@ -412,10 +443,18 @@ function ciniki_lapt_web_processRequest(&$ciniki, $settings, $tnid, $args) {
                     $page['blocks'][] = array('type'=>'links', 'section'=>'links', 'title'=>'Links', 'links'=>$document['links']);
                 }
                 if( isset($document['files']) && count($document['files']) > 0 ) {
+                    //
+                    // Remove non-public images
+                    //
+                    foreach($document['files'] as $fid => $file) {
+                        if( ($file['flags']&0x01) == 0 ) {
+                            unset($document['files'][$fid]);
+                        }
+                    }
                     $page['blocks'][] = array('type'=>'files', 
                         'section'=>'files', 
                         'title'=> 'Downloads',
-                        'base_url'=>$base_url,
+                        'base_url'=>$base_url . '/download',
                         'files'=>$document['files']);
                 }
                 // Add share buttons  
@@ -425,6 +464,14 @@ function ciniki_lapt_web_processRequest(&$ciniki, $settings, $tnid, $args) {
                 // Add gallery
                 if( isset($document['images']) 
                     && (($document['image_id'] > 0 && count($document['images']) > 1 ) || ($document['image_id'] == 0 && count($document['images']) > 0)) ) {
+                    //
+                    // Remove non-public images
+                    //
+                    foreach($document['images'] as $iid => $image) {
+                        if( ($image['flags']&0x01) == 0 ) {
+                            unset($document['images'][$iid]);
+                        }
+                    }
                     $page['blocks'][] = array('type'=>'gallery', 'title'=>'Additional Images', 'section'=>'additional-images', 'base_url'=>$base_url . '/gallery', 'images'=>$document['images']);
                 }
             }

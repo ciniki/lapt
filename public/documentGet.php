@@ -61,6 +61,7 @@ function ciniki_lapt_documentGet($ciniki) {
         $document = array('id'=>0,
             'title'=>'',
             'permalink'=>'',
+            'doc_date'=>'',
             'status'=>'20',
             'flags'=>'0',
             'doc_date'=>'',

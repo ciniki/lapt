@@ -271,11 +271,12 @@ function ciniki_lapt_main() {
                 M.api.err(rsp);
                 return false;
             }
+            console.log(rsp);
             var p = M.ciniki_lapt_main.document;
             p.data = rsp.document;
             p.sections._types.fields.types.tags = rsp.types != null ? rsp.types : [];
             p.sections._categories.fields.categories.tags = rsp.categories != null ? rsp.categories : [];
-            p.sections._tags.fields.tags.tags = rsp.tags != null ? rsp.tags : [];
+//            p.sections._tags.fields.tags.tags = rsp.tags != null ? rsp.tags : [];
             console.log(rsp);
             p.refresh();
             p.show(cb);
