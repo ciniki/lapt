@@ -112,7 +112,7 @@ function ciniki_lapt_documentGet($ciniki) {
             . "ORDER BY tag_type, tag_name "
             . "";
         ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryArrayTree');
-        $rc = ciniki_core_dbHashQueryArrayTree($ciniki, $strsql, 'ciniki.links', array(
+        $rc = ciniki_core_dbHashQueryArrayTree($ciniki, $strsql, 'ciniki.lapt', array(
             array('container'=>'types', 'fname'=>'tag_type', 'fields'=>array('type'=>'tag_type', 'names'), 
                 'dlists'=>array('names'=>'::')),
             ));
