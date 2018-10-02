@@ -37,6 +37,23 @@ function ciniki_lapt_fileUpdate(&$ciniki) {
         return $rc;
     }
 
+    //
+    // Get the file details
+    //
+    $strsql = "SELECT id, document_id, name, permalink, flags "
+        . "FROM ciniki_lapt_files "
+        . "WHERE id = '" . ciniki_core_dbQuote($ciniki, $args['file_id']) . "' "
+        . "AND tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
+        . "";
+    $rc = ciniki_core_dbHashQuery($ciniki, $strsql, 'ciniki.lapt', 'file');
+    if( $rc['stat'] != 'ok' ) {
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.lapt.53', 'msg'=>'Unable to load file', 'err'=>$rc['err']));
+    }
+    if( !isset($rc['file']) ) {
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.lapt.54', 'msg'=>'Unable to find requested file'));
+    }
+    $file = $rc['file'];
+    
     if( isset($args['name']) ) {
         ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'makePermalink');
         $args['permalink'] = ciniki_core_makePermalink($ciniki, $args['name']);
@@ -47,6 +64,7 @@ function ciniki_lapt_fileUpdate(&$ciniki) {
             . "FROM ciniki_lapt_files "
             . "WHERE tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
             . "AND permalink = '" . ciniki_core_dbQuote($ciniki, $args['permalink']) . "' "
+            . "AND document_id = '" . ciniki_core_dbQuote($ciniki, $file['document_id']) . "' "
             . "AND id <> '" . ciniki_core_dbQuote($ciniki, $args['file_id']) . "' "
             . "";
         $rc = ciniki_core_dbHashQuery($ciniki, $strsql, 'ciniki.lapt', 'item');
