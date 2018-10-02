@@ -88,6 +88,8 @@ function ciniki_lapt_fileDownload($ciniki) {
 
     if( $rc['file']['extension'] == 'pdf' ) {
         header('Content-Type: application/pdf');
+    } elseif( $rc['file']['extension'] == 'mp3' ) {
+        header('Content-Type: audio/mpeg');
     }
 
     // Specify Filename
