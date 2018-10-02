@@ -109,7 +109,6 @@ function ciniki_lapt_web_processRequest(&$ciniki, $settings, $tnid, $args) {
                 $type_permalink = key($types);
             }
             if( $type_permalink != '' ) {
-                error_log('99sdf11');
                 $base_url .= '/' . $type_permalink;
                 $ciniki['response']['head']['og']['url'] .= '/' . $type_permalink;
                 $page['breadcrumbs'][] = array('name'=>$types[$type_permalink]['tag_name'], 'url'=>$base_url);
@@ -230,7 +229,7 @@ function ciniki_lapt_web_processRequest(&$ciniki, $settings, $tnid, $args) {
     // Display a list of documents
     //
     if( $display == 'list' || $display == 'typelist' || $display == 'categorylist' ) {
-        if( isset($categories[$category_permalink]['content']) && $categories[$category_permalink]['content'] != '' ) {
+        if( isset($category_permalink) && isset($categories[$category_permalink]['content']) && $categories[$category_permalink]['content'] != '' ) {
             if( isset($categories[$category_permalink]['image_id']) && $categories[$category_permalink]['image_id'] > 0 ) {
                 $page['blocks'][] = array('type'=>'image', 'section'=>'primary-image', 'primary'=>'yes', 
                     'image_id'=>$categories[$category_permalink]['image_id'], 
@@ -259,6 +258,7 @@ function ciniki_lapt_web_processRequest(&$ciniki, $settings, $tnid, $args) {
                 . "INNER JOIN ciniki_lapt_tags AS categories ON ("
                     . "types.document_id = categories.document_id "
                     . "AND categories.permalink = '" . ciniki_core_dbQuote($ciniki, $category_permalink) . "' "
+                    . "AND categories.tag_type = 40 "
                     . "AND categories.tnid = '" . ciniki_core_dbQuote($ciniki, $tnid) . "' "
                     . ") "
                 . "INNER JOIN ciniki_lapt_documents AS documents ON ("
@@ -268,6 +268,7 @@ function ciniki_lapt_web_processRequest(&$ciniki, $settings, $tnid, $args) {
                     . ") "
                 . "WHERE types.tnid = '" . ciniki_core_dbQuote($ciniki, $tnid) . "' "
                 . "AND types.permalink = '" . ciniki_core_dbQuote($ciniki, $type_permalink) . "' "
+                . "AND types.tag_type = 20 "
                 . "ORDER BY documents.doc_date DESC, documents.title "
                 . "";
             
@@ -286,6 +287,7 @@ function ciniki_lapt_web_processRequest(&$ciniki, $settings, $tnid, $args) {
                     . ") "
                 . "WHERE types.tnid = '" . ciniki_core_dbQuote($ciniki, $tnid) . "' "
                 . "AND types.permalink = '" . ciniki_core_dbQuote($ciniki, $type_permalink) . "' "
+                . "AND types.tag_type = 20 "
                 . "ORDER BY documents.doc_date DESC, documents.title "
                 . "";
         } elseif( isset($category_permalink) && $category_permalink != '' ) {
@@ -303,6 +305,7 @@ function ciniki_lapt_web_processRequest(&$ciniki, $settings, $tnid, $args) {
                     . ") "
                 . "WHERE categories.tnid = '" . ciniki_core_dbQuote($ciniki, $tnid) . "' "
                 . "AND categories.permalink = '" . ciniki_core_dbQuote($ciniki, $category_permalink) . "' "
+                . "AND categories.tag_type = 40 "
                 . "ORDER BY documents.doc_date DESC, documents.title "
                 . "";
         } else {
