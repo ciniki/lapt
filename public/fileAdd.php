@@ -106,7 +106,7 @@ function ciniki_lapt_fileAdd(&$ciniki) {
     }
 
     $args['org_filename'] = $_FILES['uploadfile']['name'];
-    $args['extension'] = preg_replace('/^.*\.([a-zA-Z]+)$/', '$1', $args['org_filename']);
+    $args['extension'] = preg_replace('/^.*\.([a-zA-Z0-9]+)$/', '$1', $args['org_filename']);
 
     //
     // Move the file to ciniki-storage
