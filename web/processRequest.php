@@ -77,7 +77,7 @@ function ciniki_lapt_web_processRequest(&$ciniki, $settings, $tnid, $args) {
             array('container'=>'types', 'fname'=>'permalink', 'fields'=>array('tag_name')),
             ));
         if( $rc['stat'] != 'ok' ) {
-            return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.lapt.42', 'msg'=>'Unable to load types', 'err'=>$rc['err']));
+            return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.lapt.59', 'msg'=>'Unable to load types', 'err'=>$rc['err']));
         }
         $types = isset($rc['types']) ? $rc['types'] : array();
 
@@ -346,10 +346,10 @@ function ciniki_lapt_web_processRequest(&$ciniki, $settings, $tnid, $args) {
             return $rc;
         }
         if( isset($rc['document']) && $rc['document']['status'] != 50 ) {
-            return array('stat'=>'404', 'err'=>array('code'=>'ciniki.lapt.33', 'msg'=>"We're sorry, the page you requested is not available."));
+            return array('stat'=>'404', 'err'=>array('code'=>'ciniki.lapt.55', 'msg'=>"We're sorry, the page you requested is not available."));
         }
         if( !isset($rc['document']) ) {
-            return array('stat'=>'404', 'err'=>array('code'=>'ciniki.lapt.34', 'msg'=>"We're sorry, the page you requested is not available."));
+            return array('stat'=>'404', 'err'=>array('code'=>'ciniki.lapt.56', 'msg'=>"We're sorry, the page you requested is not available."));
         } else {
             $document = $rc['document'];
             

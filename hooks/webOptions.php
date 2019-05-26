@@ -58,7 +58,7 @@ function ciniki_lapt_hooks_webOptions(&$ciniki, $tnid, $args) {
             . "";
         $rc = ciniki_core_dbHashQuery($ciniki, $strsql, 'ciniki.lapt', 'item');
         if( $rc['stat'] != 'ok' ) {
-            return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.lapt.39', 'msg'=>'Unable to load types', 'err'=>$rc['err']));
+            return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.lapt.58', 'msg'=>'Unable to load types', 'err'=>$rc['err']));
         }
         if( isset($rc['rows']) && count($rc['rows']) > 0 ) {
             array_unshift($rc['rows'], array('label'=>'All', 'value'=>''));

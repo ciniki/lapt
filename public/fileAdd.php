@@ -119,7 +119,7 @@ function ciniki_lapt_fileAdd(&$ciniki) {
     }
 
     if( !rename($_FILES['uploadfile']['tmp_name'], $storage_filename) ) {
-        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.lapt.35', 'msg'=>'Unable to add file'));
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.lapt.57', 'msg'=>'Unable to add file'));
     }
 
     //
