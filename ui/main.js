@@ -311,15 +311,15 @@ function ciniki_lapt_main() {
         }
     }
     this.document.remove = function() {
-        if( confirm('Are you sure you want to remove document?') ) {
-            M.api.getJSONCb('ciniki.lapt.documentDelete', {'tnid':M.curTenantID, 'document_id':this.document_id}, function(rsp) {
+        M.confirm('Are you sure you want to remove document?',null,function() {
+            M.api.getJSONCb('ciniki.lapt.documentDelete', {'tnid':M.curTenantID, 'document_id':M.ciniki_lapt_main.document.document_id}, function(rsp) {
                 if( rsp.stat != 'ok' ) {
                     M.api.err(rsp);
                     return false;
                 }
                 M.ciniki_lapt_main.document.close();
             });
-        }
+        });
     }
     this.document.addButton('save', 'Save', 'M.ciniki_lapt_main.document.save();');
     this.document.addClose('Cancel');
@@ -393,15 +393,15 @@ function ciniki_lapt_main() {
         }
     }
     this.link.remove = function() {
-        if( confirm('Are you sure you want to remove link?') ) {
-            M.api.getJSONCb('ciniki.lapt.linkDelete', {'tnid':M.curTenantID, 'link_id':this.link_id}, function(rsp) {
+        M.confirm('Are you sure you want to remove link?',null,function() {
+            M.api.getJSONCb('ciniki.lapt.linkDelete', {'tnid':M.curTenantID, 'link_id':M.ciniki_lapt_main.link.link_id}, function(rsp) {
                 if( rsp.stat != 'ok' ) {
                     M.api.err(rsp);
                     return false;
                 }
                 M.ciniki_lapt_main.link.close();
             });
-        }
+        });
     }
     this.link.addButton('save', 'Save', 'M.ciniki_lapt_main.link.save();');
     this.link.addClose('Cancel');
@@ -491,15 +491,15 @@ function ciniki_lapt_main() {
         }
     }
     this.file.remove = function() {
-        if( confirm('Are you sure you want to remove file?') ) {
-            M.api.getJSONCb('ciniki.lapt.fileDelete', {'tnid':M.curTenantID, 'file_id':this.file_id}, function(rsp) {
+        M.confirm('Are you sure you want to remove file?',null,function() {
+            M.api.getJSONCb('ciniki.lapt.fileDelete', {'tnid':M.curTenantID, 'file_id':M.ciniki_lapt_main.file.file_id}, function(rsp) {
                 if( rsp.stat != 'ok' ) {
                     M.api.err(rsp);
                     return false;
                 }
                 M.ciniki_lapt_main.file.close();
             });
-        }
+        });
     }
     this.file.addButton('save', 'Save', 'M.ciniki_lapt_main.file.save();');
     this.file.addClose('Cancel');
@@ -582,15 +582,15 @@ function ciniki_lapt_main() {
         }
     }
     this.image.remove = function() {
-        if( confirm('Are you sure you want to remove image?') ) {
-            M.api.getJSONCb('ciniki.lapt.imageDelete', {'tnid':M.curTenantID, 'document_image_id':this.document_image_id}, function(rsp) {
+        M.confirm('Are you sure you want to remove image?',null,function() {
+            M.api.getJSONCb('ciniki.lapt.imageDelete', {'tnid':M.curTenantID, 'document_image_id':M.ciniki_lapt_main.image.document_image_id}, function(rsp) {
                 if( rsp.stat != 'ok' ) {
                     M.api.err(rsp);
                     return false;
                 }
                 M.ciniki_lapt_main.image.close();
             });
-        }
+        });
     }
     this.image.addButton('save', 'Save', 'M.ciniki_lapt_main.image.save();');
     this.image.addClose('Cancel');
@@ -613,7 +613,7 @@ function ciniki_lapt_main() {
         //
         var ac = M.createContainer(ap, 'ciniki_lapt_main', 'yes');
         if( ac == null ) {
-            alert('App Error');
+            M.alert('App Error');
             return false;
         }
         
