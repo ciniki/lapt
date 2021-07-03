@@ -343,7 +343,7 @@ function ciniki_lapt_web_processRequest(&$ciniki, $settings, $tnid, $args) {
         ciniki_core_loadMethod($ciniki, 'ciniki', 'lapt', 'private', 'documentLoad');
         $rc = ciniki_lapt_documentLoad($ciniki, $tnid, $document_permalink);
         if( $rc['stat'] != 'ok' ) {
-            return $rc;
+            return array('stat'=>'404', 'err'=>array('code'=>'ciniki.lapt.60', 'msg'=>'Invalid document requested'));
         }
         if( isset($rc['document']) && $rc['document']['status'] != 50 ) {
             return array('stat'=>'404', 'err'=>array('code'=>'ciniki.lapt.55', 'msg'=>"We're sorry, the page you requested is not available."));
